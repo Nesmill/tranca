@@ -1,3 +1,5 @@
 docs/shots/
 .tripo/
-assets/characters3d/
+# The pristine 56 MB Tripo exports stay local; the web-optimized ones ship.
+assets/characters3d/**/*.glb
+!assets/characters3d/**/*-web.glb

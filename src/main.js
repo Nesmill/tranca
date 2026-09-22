@@ -34,8 +34,9 @@ export async function main() {
   }
   document.body.dataset.state = ctx.state.name;
 
-  // The opponents: the original 3D figures by default. `?cast=sprites` puts
-  // the 2.5D billboard cast (characters.js) back at the table for comparison.
+  // The opponents: seats.js by default (generated GLB cast over primitive
+  // stand-ins). `?cast=sprites` brings back the 2.5D billboards; seats.js also
+  // honours `?cast=primitives` to skip the generated models.
   const cast = ctx.params.cast === 'sprites' ? characters : seats;
   engine.register(cast);
   engine.register(board);

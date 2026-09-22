@@ -1,0 +1,41 @@
+[
+  {
+    "name": "yolanda",
+    "glb": "assets/characters3d/yolanda/yolanda.glb",
+    "sizeBytes": 58450760,
+    "clips": [
+      "preset:biped:idle",
+      "preset:biped:sit",
+      "preset:biped:look_around"
+    ],
+    "rigBones": 41,
+    "faces": 1452458,
+    "notes": "proud warm Dominican woman, late 50s; short curly dark hair w/ grey streaks, gold earrings, floral house dress; rival on the player's left. Tripo text_to_model (v3.1-20260211) -> rig-check riggable=true/biped -> rig model=rig-v1.0 (41 bones incl. L/R_Thigh,Calf,Foot,ToeBase) -> one retarget with 3 in-place presets. Origin at feet, height 1.0 unit, forward +X (ankle->toe rest vector +X), arm span on Z; scale ~1.8x in game. Clips are named preset:biped:*; loop idle/look_around, sit is a one-shot. Preview: assets/characters3d/yolanda/yolanda-preview.png. glb sha256[0:16]=c9581a39af6788b5. Tasks: gen b1ce7fab-c335-4dd1-b7ea-55ee561bc4c6, rig 3f237170-3b57-45d1-ac61-7c6c4adbdd4f, retarget ad84e59c-5708-4caf-a83f-838e5d28c370."
+  },
+  {
+    "name": "ramon",
+    "glb": "assets/characters3d/ramon/ramon.glb",
+    "sizeBytes": 58277432,
+    "clips": [
+      "preset:biped:idle",
+      "preset:biped:sit",
+      "preset:biped:look_around"
+    ],
+    "rigBones": 41,
+    "faces": 1452464,
+    "notes": "big friendly Dominican man ~40; dark skin, short black hair, light beard, white guayabera; the player's partner across the table. Tripo text_to_model (v3.1-20260211) -> rig-check riggable=true/biped -> rig model=rig-v1.0 (41 bones incl. L/R_Thigh,Calf,Foot,ToeBase) -> one retarget with 3 in-place presets. Origin at feet, height 1.0 unit, forward +X (ankle->toe rest vector +X), arm span on Z; scale ~1.8x in game. Clips are named preset:biped:*; loop idle/look_around, sit is a one-shot. Preview: assets/characters3d/ramon/ramon-preview.png. glb sha256[0:16]=a394ba234fb626af. Tasks: gen ba0c138c-49e3-4ef7-88d1-73de91f9cb2d, rig 13bd3c4a-e530-486f-824d-00abc958c189, retarget acda6880-1ee1-4efc-aaee-9c08681f0a63."
+  },
+  {
+    "name": "manuel",
+    "glb": "assets/characters3d/manuel/manuel.glb",
+    "sizeBytes": 59758560,
+    "clips": [
+      "preset:biped:idle",
+      "preset:biped:sit",
+      "preset:biped:look_around"
+    ],
+    "rigBones": 41,
+    "faces": 1491544,
+    "notes": "wiry LEAN slender Dominican man, 60s; WARM DEEP BROWN skin, grey moustache, worn flat cap, plain white undershirt under an open short-sleeved shirt, cheeky mischievous grin; rival on the player's right. REGENERATED 2026-09-22 (previous manuel was stocky/pale/gently smiling - off brief). Prompt: \"Full body stylized 3D game character: wiry lean slender build, deep warm brown skin, cheeky mischievous grin. Older Dominican man, 60s, grey moustache, worn flat cap, white undershirt under open short-sleeved shirt, clean topology, slightly caricatured adult proportions, matte textures, neutral A-pose, no background.\" Tripo text_to_model (v3.1-20260211) -> rig-check riggable=true/biped -> rig model=rig-v1.0 (41 bones incl. L/R_Thigh,Calf,Foot,ToeBase) -> one retarget with 3 in-place presets. Origin at feet, height 1.0 unit, forward +X (ankle->toe rest vector +X), arm span on Z; scale ~1.8x in game. Clips are named preset:biped:*; loop idle/look_around, sit is a one-shot. Web build: assets/characters3d/manuel/manuel-web.glb (3,400,444 B; gltf-transform optimize, webp 1024, simplify 0.35, meshopt; 522,038 tris, clips + 41 bones preserved). Preview: assets/characters3d/manuel/manuel-preview.png (fresh Tripo render of the new rigged model). glb sha256[0:16]=4ddae46e4cd7b9ba. Tasks: gen bb1c669e-fed2-4d5a-829d-9411928728f6, rig-check b0ae7e1b-fdc5-4795-839c-8fe0e4ebae60, rig 9b148ec9-2cae-42bf-8b15-1b9f1f8e931c, retarget ba2e99b3-2ab0-42ac-a851-52cf5f468946. Cost: 20+0+25+30 = 75 credits (1465 -> 1390). NOTE: other entries (yolanda/ramon) untouched."
+  }
+]

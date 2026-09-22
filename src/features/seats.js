@@ -13,6 +13,8 @@
 
 import * as THREE from 'three';
 import { SEATS, SEAT_HEAD_Y, TABLE } from '../core/layout.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 
 // --- Tuning constants ---------------------------------------------------
 const HEAD_R = 0.088; // head top lands on SEAT_HEAD_Y (1.15)
@@ -74,6 +76,16 @@ const CSS = `
 // score pill; MIN_PLATE_Y is the same screen-space floor the sprite cast used.
 const PLATE_Y = 1.26;
 const MIN_PLATE_Y = 96;
+
+// The generated cast (assets/characters3d/): rigged, retargeted Tripo models,
+// meshopt-compressed and texture-shrunk for the web. Each GLB is 1.0 unit
+// tall with its origin at the feet and its forward on +X (see the manifest).
+// The exports measure ~0.7 units tall (the manifest's "height 1.0" is wrong;
+// measured from screenshots: 1.18 left only the crown over the table rim).
+// 1.75 puts the head top just above the rim, legs hidden by the table.
+const GLB_SCALE = 1.75;
+const BODY_YAW_MAX = 0.5; // a body turns toward the action less than a head does
+const glbName = (label) => label.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
 export default {
   name: 'seats',
@@ -205,6 +217,9 @@ export default {
         yaw: 0,
         pitch: 0,
         phase: seatIndex * 1.7,
+        baseYaw: seat.yaw,
+        model: null,
+        mixer: null,
         // The head's world position never moves: the group only rotates
         // about y, which leaves the pivot's (x, y, z) exactly where it is.
         headWorld: new THREE.Vector3(seat.pos[0], NECK_Y, seat.pos[2]),
@@ -213,6 +228,24 @@ export default {
 
     ctx.scene.add(this.group);
     ctx.log(`seats: ${this.people.map((p) => SEATS[p.seat].label).join(', ')} seated`);
+
+    // The generated cast swaps in for each stand-in as its GLB arrives;
+    // `?cast=primitives` keeps the built figures. A failed load leaves the
+    // stand-in in place — the table never waits on the network.
+    if (ctx.params.cast !== 'primitives') {
+      const loader = new GLTFLoader();
+      loader.setMeshoptDecoder(MeshoptDecoder);
+      for (const person of this.people) {
+        const name = glbName(SEATS[person.seat].label);
+        const url = `assets/characters3d/${name}/${name}-web.glb`;
+        loader.load(
+          url,
+          (gltf) => this.installGlb(person, gltf),
+          undefined,
+          (err) => ctx.log(`seats: ${name} GLB failed (${err?.message ?? err}); keeping the stand-in`),
+        );
+      }
+    }
   },
 
   /**
@@ -262,6 +295,15 @@ export default {
 
       let wantYaw = Math.atan2(lx, lz);
       let wantPitch = Math.atan2(-ly, Math.hypot(lx, lz));
+
+      if (person.model) {
+        // The generated cast turns the whole body toward the action.
+        wantYaw = Math.max(-BODY_YAW_MAX, Math.min(BODY_YAW_MAX, wantYaw));
+        person.yaw += (wantYaw - person.yaw) * smooth;
+        person.figure.rotation.y = person.baseYaw + person.yaw;
+        continue;
+      }
+
       wantYaw = Math.max(-MAX_YAW, Math.min(MAX_YAW, wantYaw));
       wantPitch = Math.max(-PITCH_UP, Math.min(PITCH_DOWN, wantPitch));
 
@@ -271,6 +313,33 @@ export default {
     }
   },
 
+  /** Swap a generated character in for its primitive stand-in. */
+  installGlb(person, gltf) {
+    const model = gltf.scene;
+    for (const child of person.figure.children) child.visible = false;
+    model.scale.setScalar(GLB_SCALE);
+    // Model forward is +X (measured ankle-to-toe in the manifest); the
+    // figure's +Z faces the table, so -90 lines the face up with it.
+    model.rotation.y = -Math.PI / 2;
+    model.traverse((o) => {
+      // Their shadows fall behind the table where nobody sees them.
+      if (o.isMesh) o.castShadow = false;
+    });
+    person.figure.add(model);
+    person.model = model;
+
+    // The exports are one-shots: looping has to be asked for explicitly.
+    const clips = gltf.animations ?? [];
+    const idle = clips.find((c) => /idle/i.test(c.name)) ?? clips[0];
+    if (idle) {
+      person.mixer = new THREE.AnimationMixer(model);
+      const action = person.mixer.clipAction(idle);
+      action.setLoop(THREE.LoopRepeat);
+      action.play();
+    }
+    this.ctx.log(`seats: ${SEATS[person.seat].label} is in (clips: ${clips.map((c) => c.name).join(', ') || 'none'})`);
+  },
+
   update(dt) {
     this.time += dt;
     const game = this.ctx.game;
@@ -278,12 +347,16 @@ export default {
     const vw = canvas.clientWidth || 1;
     const vh = canvas.clientHeight || 1;
 
+    for (const person of this.people) person.mixer?.update(dt);
     this.gaze(dt);
 
     for (const person of this.people) {
-      // A small breath so a seated figure does not read as a statue.
-      const breath = 1 + Math.sin(this.time * BREATH_HZ * Math.PI * 2 + person.phase) * 0.012;
-      person.torso.scale.set(1.15, breath, 0.85);
+      // A small breath so a seated figure does not read as a statue. The
+      // generated cast breathes through its idle clip instead.
+      if (!person.model) {
+        const breath = 1 + Math.sin(this.time * BREATH_HZ * Math.PI * 2 + person.phase) * 0.012;
+        person.torso.scale.set(1.15, breath, 0.85);
+      }
 
       // Float the plate over the head, in screen space.
       const seat = SEATS[person.seat];
@@ -311,7 +384,20 @@ export default {
     this.group?.parent?.remove(this.group);
     for (const geo of Object.values(this.geo ?? {})) geo?.dispose?.();
     for (const mat of Object.values(this.mat ?? {})) mat?.dispose?.();
-    for (const person of this.people ?? []) person.plate?.remove();
+    for (const person of this.people ?? []) {
+      person.mixer?.stopAllAction();
+      person.model?.traverse((o) => {
+        if (o.isMesh) {
+          o.geometry?.dispose();
+          const mats = Array.isArray(o.material) ? o.material : [o.material];
+          for (const m of mats) {
+            m?.map?.dispose();
+            m?.dispose();
+          }
+        }
+      });
+      person.plate?.remove();
+    }
     this.style?.remove();
     this.people = [];
     this.geo = null;
