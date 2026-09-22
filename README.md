@@ -1,4 +1,6 @@
-# Repite y Tranca: Dominó
+# Repite y Tranca — Dominó
+
+**▶ Play it live (free, no account): https://nesmill.github.io/tranca/**
 
 A first-person dominó game set in a Dominican colmado at night. Four players at
 the blue plastic table — your partner across from you, two rivals on either
