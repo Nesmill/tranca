@@ -1,0 +1,36 @@
+{
+  "prompt": "Character reference sheet on a flat solid magenta background, drawn in exactly the same cartoon-realistic mobile game art style, line weight and warm lighting as the reference image. The SAME person shown six times in a neat 3x2 grid, identical in every cell, same size and same scale in every cell, evenly spaced, no borders, no text. HANDS ARE COMPLETELY EMPTY in every pose: no dominoes, no tiles, no table, no furniture, no props, no objects of any kind. Just the person against plain flat magenta. Poses in order: 1 standing idle, relaxed smile. 2 thinking, one hand on chin. 3 reaching forward with an open empty hand. 4 arms folded, unimpressed frown. 5 head back laughing. 6 shrugging with both palms up. Full upper body and head in each cell. THE PERSON: a heavyset Dominican man in his forties, black sunglasses, short dark hair, thick black beard, plain dark green t-shirt, two thin gold chains, gold watch, stern closed-mouth expression, dark brown skin.",
+  "model": "google/gemini-3.1-flash-lite-image",
+  "aspectRatio": "1:1",
+  "resolution": null,
+  "references": 1,
+  "formats": [
+    "jpg"
+  ],
+  "outputs": [
+    "char3-sheet2.jpg"
+  ],
+  "usage": {
+    "prompt_tokens": 1346,
+    "completion_tokens": 1120,
+    "total_tokens": 2466,
+    "cost": 0.0339365,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.0339365,
+      "upstream_inference_prompt_cost": 0.0003365,
+      "upstream_inference_completions_cost": 0.0336
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 1120
+    }
+  },
+  "generatedAt": "2026-09-11T14:09:00.927Z"
+}

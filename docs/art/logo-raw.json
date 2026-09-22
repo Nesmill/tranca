@@ -1,0 +1,36 @@
+{
+  "prompt": "Mobile game title logo on a flat solid magenta background. The word DOMINO in bold chunky cartoon 3D letters, warm cream and gold with a thick dark brown outline and a slight bevel, tilted very slightly. A small gold crown sits on top of the letter O. Directly underneath in much smaller clean uppercase letters: LA MESA SIEMPRE LLAMA. Centered composition, generous magenta margin around the logo, no other elements, no frame, no border.",
+  "model": "google/gemini-3.1-flash-lite-image",
+  "aspectRatio": "16:9",
+  "resolution": null,
+  "references": 0,
+  "formats": [
+    "jpg"
+  ],
+  "outputs": [
+    "logo-raw.jpg"
+  ],
+  "usage": {
+    "prompt_tokens": 94,
+    "completion_tokens": 1120,
+    "total_tokens": 1214,
+    "cost": 0.0336235,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.0336235,
+      "upstream_inference_prompt_cost": 0.0000235,
+      "upstream_inference_completions_cost": 0.0336
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 1120
+    }
+  },
+  "generatedAt": "2026-09-11T14:09:43.547Z"
+}

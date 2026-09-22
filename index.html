@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0d0b09" />
+    <title>Repite y Tranca: Dominó</title>
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0; padding: 0; height: 100%; overflow: hidden;
+        background: #0d0b09; color: #f4ead8;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* The canvas fills the viewport on a phone. The camera holds a constant
+         vertical FOV, so the composition survives any screen shape. */
+      #stage { position: fixed; inset: 0; display: block; width: 100%; height: 100%; }
+
+      #hud {
+        position: fixed; inset: 0; pointer-events: none;
+        padding: env(safe-area-inset-top) env(safe-area-inset-right)
+                 env(safe-area-inset-bottom) env(safe-area-inset-left);
+      }
+      #hud > * { pointer-events: auto; }
+
+      #title-card {
+        position: absolute; inset: 0; display: grid; place-content: center;
+        gap: 10px; text-align: center; background: rgba(13, 11, 9, 0.92);
+      }
+      #title-card h1 {
+        margin: 0; font-size: clamp(26px, 8vw, 42px); letter-spacing: 0.02em;
+        color: #f6d98a; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+      }
+      #title-card h1 small { display: block; font-size: 0.44em; letter-spacing: 0.34em;
+        color: #cbbfa6; margin-top: 8px; text-transform: uppercase; }
+      #title-card p { margin: 0; color: #b9ad95; font-size: 14px; }
+      body[data-state="PLAYING"] #title-card,
+      body[data-state="DEALING"] #title-card,
+      body[data-state="HAND_END"] #title-card { display: none; }
+
+      /* Anchored to the top: the bottom of the frame belongs to the hand strip. */
+      #debug {
+        position: fixed; left: 0; top: 0; margin: 0; padding: 8px 10px;
+        max-width: 100%; white-space: pre-wrap; display: none;
+        font: 11px/1.45 ui-monospace, Consolas, monospace;
+        color: #9df0b6; background: rgba(0, 0, 0, 0.74); pointer-events: none;
+      }
+      #debug b { color: #ff9a9a; }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./lib/three/three.module.js",
+          "three/addons/": "./lib/three/addons/"
+        }
+      }
+    </script>
+  </head>
+  <body data-state="BOOT">
+    <canvas id="stage"></canvas>
+    <div id="hud">
+      <div id="title-card">
+        <h1>Repite y Tranca<small>Dominó</small></h1>
+        <p>Toca para sentarte a la mesa</p>
+      </div>
+    </div>
+    <pre id="debug"></pre>
+
+    <script>
+      // Trap first so nothing below can fail silently into a blank canvas.
+      window.__errors = [];
+      const record = (tag) => (e) => {
+        window.__errors.push(`[${tag}] ${e?.message ?? e}`);
+        const el = document.getElementById('debug');
+        if (el) {
+          el.style.display = 'block';
+          el.textContent += `\n[${tag}] ${e?.message ?? e}\n${e?.stack ?? ''}`;
+        }
+      };
+      window.addEventListener('error', record('error'));
+      window.addEventListener('unhandledrejection', (e) => record('rejection')(e.reason));
+    </script>
+
+    <script type="module">
+      import { main } from './src/main.js';
+      main().catch((err) => {
+        window.__errors.push(String(err));
+        const el = document.getElementById('debug');
+        el.style.display = 'block';
+        el.textContent = `boot failed: ${err?.message ?? err}\n${err?.stack ?? ''}`;
+      });
+    </script>
+  </body>
+</html>

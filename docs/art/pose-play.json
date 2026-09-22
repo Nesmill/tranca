@@ -1,0 +1,36 @@
+{
+  "prompt": "Same character as the reference image - identical face, black baseball cap, short beard, white t-shirt, thin gold chain. Stylized 3D cartoon-realism mobile game render, warm evening lighting. Upper body, facing the camera straight on, centered. Flat solid magenta background (#FF00FF), no checkerboard pattern, no shadow cast on the background. Now captured mid-action: leaning forward and reaching out with his right hand to place a domino tile down on the table in front of him.",
+  "model": "google/gemini-3.1-flash-lite-image",
+  "aspectRatio": "1:1",
+  "resolution": null,
+  "references": 1,
+  "formats": [
+    "jpg"
+  ],
+  "outputs": [
+    "pose-play.jpg"
+  ],
+  "usage": {
+    "prompt_tokens": 1225,
+    "completion_tokens": 1120,
+    "total_tokens": 2345,
+    "cost": 0.03390625,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.03390625,
+      "upstream_inference_prompt_cost": 0.00030625,
+      "upstream_inference_completions_cost": 0.0336
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 1120
+    }
+  },
+  "generatedAt": "2026-09-11T05:19:46.135Z"
+}
