@@ -7,7 +7,7 @@
 // holding it fixed keeps the framing identical on every phone shape.
 
 import * as THREE from 'three';
-import { RIG } from './layout.js';
+import { RIG, SEATS, SEAT_HEAD_Y } from './layout.js';
 
 // --- Tuning constants ---------------------------------------------------
 // Vertical FOV is held constant and aspect comes from the viewport, so the
@@ -31,6 +31,23 @@ const LEAN_SMOOTH = 3.4;
 export function createRig() {
   const camera = new THREE.PerspectiveCamera(VERTICAL_FOV, 1, NEAR, FAR);
 
+  // RigZoomPush (the documented QA hook): `?target=n&zoom=1` locks a static
+  // close-up on opponent n (1-3). Not gameplay — used for visual checks. The
+  // rig keeps its full API; apply() just parks the camera on the seat.
+  const q = new URLSearchParams(globalThis.location?.search ?? '');
+  const seatNo = Number.parseInt(q.get('target') ?? '', 10);
+  const closeUp = Number.isInteger(seatNo) && seatNo >= 1 && seatNo <= 3 && q.get('zoom') === '1';
+  const closeUpEye = new THREE.Vector3();
+  const closeUpAim = new THREE.Vector3();
+  if (closeUp) {
+    const seat = SEATS[seatNo];
+    const toTable = new THREE.Vector3(-seat.pos.x, 0, -seat.pos.z).normalize();
+    closeUpEye.set(seat.pos.x + toTable.x * 0.55, SEAT_HEAD_Y, seat.pos.z + toTable.z * 0.55);
+    closeUpAim.set(seat.pos.x, SEAT_HEAD_Y, seat.pos.z);
+    camera.fov = 28;
+    camera.updateProjectionMatrix();
+  }
+
   let yaw = RIG.baseYaw;
   let pitch = RIG.basePitch;
   let targetYaw = yaw;
@@ -51,6 +68,11 @@ export function createRig() {
   };
 
   const apply = () => {
+    if (closeUp) {
+      camera.position.copy(closeUpEye);
+      camera.lookAt(closeUpAim);
+      return;
+    }
     const leanT = lean;
     // Lean-in travels along the aim direction: forward and slightly down.
     eye.set(
