@@ -1,0 +1,171 @@
+{
+  "character": "manuel",
+  "reference_image": "docs/refs/manuel.png",
+  "description": "Wiry lean Dominican man in his 60s: thick grey moustache, cheeky grin, worn light-tan flat cap, white ribbed tank under an open short-sleeved faded tan shirt, worn knee-length shorts, brown lace-up shoes. Toon style, matte colours.",
+  "generated_at": "2026-09-22T19:24:26-04:00",
+  "tripo": {
+    "profile": "default",
+    "region": "ov",
+    "cli": "tripo-cli (npm -g)",
+    "generation": {
+      "task_id": "cc9e56c8-85c7-4aec-adda-3feac178701c",
+      "type": "image_to_model",
+      "model": "v3.1-20260211",
+      "command": "tripo make docs/refs/manuel.png --model tripo-v3.1",
+      "credits": 30
+    },
+    "rig_check": {
+      "task_id": "71e5a2bf-a7a1-4da3-88c0-54f21d44c1f7",
+      "type": "animate_prerigcheck",
+      "result": {
+        "riggable": true,
+        "rig_type": "biped"
+      },
+      "credits": 0
+    },
+    "rig": {
+      "task_id": "1427ffa3-3467-45be-bb93-ac08808c4a3c",
+      "type": "animate_rig",
+      "command": "tripo anim rig <gen> --rig-type biped -p model=rig-v1.0 --out-format glb",
+      "rig_model": "rig-v1.0",
+      "wire_value": "v1.0-20240301",
+      "spec": "tripo",
+      "rig_type": "biped",
+      "joints": 41,
+      "legged": true,
+      "credits": 25
+    },
+    "retarget": {
+      "task_id": "fdf7acb0-0ead-412f-95f0-a64a564b3d87",
+      "type": "animate_retarget",
+      "command": "tripo anim retarget <rig> --animation preset:biped:idle preset:biped:sit preset:biped:look_around --animate-in-place --out-format glb",
+      "clips_requested": [
+        "preset:biped:idle",
+        "preset:biped:sit",
+        "preset:biped:look_around"
+      ],
+      "animate_in_place": true,
+      "out_format": "glb",
+      "credits": 30
+    },
+    "credits_spent_total": 85,
+    "credits_budget": 100
+  },
+  "files": {
+    "raw": {
+      "path": "assets/characters3d/manuel/manuel.glb",
+      "bytes": 56985824,
+      "sha256": "92fca590c0a27d61f8e2bb16df49332443b128730452c0687fe61b3d99cf4702",
+      "sha256_16": "92fca590c0a27d61",
+      "contents": "Tripo retarget export (rig v1.0 + 3 baked clips) + hip-offset post-process, uncompressed",
+      "vertices": 727860,
+      "triangles": 1414537
+    },
+    "web": {
+      "path": "assets/characters3d/manuel/manuel-web.glb",
+      "bytes": 3318696,
+      "sha256": "772025ead754b6bfd2726e0b7a489f154ec875a13cf550b02cd614773a48925f",
+      "sha256_16": "772025ead754b6bf",
+      "optimize_command": "npx -y @gltf-transform/cli optimize <raw> assets/characters3d/manuel/manuel-web.glb --texture-size 1024 --texture-compress webp --simplify true --simplify-ratio 0.35 --compress meshopt",
+      "vertices": 265323,
+      "triangles": 495085,
+      "extensions_required": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "loader_note": "needs a MeshoptDecoder + WebP-capable loader (three.js: GLTFLoader + MeshoptDecoder from three/examples/jsm/libs/meshopt_decoder.module.js); verified loading in headless Chrome/Edge"
+    },
+    "preview": {
+      "path": "assets/characters3d/manuel/manuel-preview.png",
+      "bytes": 192513,
+      "contents": "1160x808 composite of two renders of manuel-web.glb (front + three-quarter), idle clip t=0.4s"
+    }
+  },
+  "rig_status": {
+    "riggable": true,
+    "rig_type": "biped",
+    "joints": 41,
+    "legged_rig": true,
+    "joints_key": [
+      "Root",
+      "Hip",
+      "Pelvis",
+      "Waist",
+      "Spine01",
+      "Spine02",
+      "NeckTwist01",
+      "NeckTwist02",
+      "Head",
+      "L_Thigh",
+      "L_Calf",
+      "L_Foot",
+      "L_ToeBase",
+      "R_Thigh",
+      "R_Calf",
+      "R_Foot",
+      "R_ToeBase",
+      "L_Clavicle",
+      "L_Upperarm",
+      "L_Forearm",
+      "L_Hand",
+      "R_Clavicle",
+      "R_Upperarm",
+      "R_Forearm",
+      "R_Hand"
+    ],
+    "clips": [
+      {
+        "name": "preset:biped:idle",
+        "channels": 126,
+        "keys": 369,
+        "duration_s": 15.38
+      },
+      {
+        "name": "preset:biped:sit",
+        "channels": 126,
+        "keys": 173,
+        "duration_s": 7.21
+      },
+      {
+        "name": "preset:biped:look_around",
+        "channels": 126,
+        "keys": 375,
+        "duration_s": 15.62
+      }
+    ],
+    "clips_count": 3
+  },
+  "measurements": {
+    "units": "normalised: 1.0 unit = character height",
+    "height_units": 1.0,
+    "height_evidence": "raw glb: skinned mesh POSITION bbox y 0.0..1.0000 (mesh node world transform = identity); three.js skinned-pose bbox with the idle clip: y -0.007..1.001",
+    "bbox_units_xyz": [
+      0.213,
+      1.0,
+      0.34
+    ],
+    "up_axis": "+Y",
+    "facing": "+X",
+    "facing_evidence": "rest ankle->toe vectors: L_Foot->L_ToeBase (0.0350, -0.0039, -0.0143), R_Foot->R_ToeBase (0.0331, -0.0012, +0.0109); mean unit vector (0.996, -0.076, -0.050) => forward = +X (matches Tripo export_orientation default '+x'). Character-left = -Z (all L_* joints sit at -Z). Feet are splayed ~20 deg outward about +X.",
+    "scale_hint": "multiply by 1.7 to get metres (approx. 1.7 m tall character)",
+    "hip_rest_height_units": 0.4739,
+    "toe_length_units": 0.038
+  },
+  "post_processing": [
+    {
+      "what": "Restored the Hip joint's rest translation offset in all three animation clips (both raw and web files).",
+      "why": "Tripo's retarget output animates Hip.translation without the rest offset (rest = (0, 0, 0.47392) in the Hip's local frame, where local +Z maps to world +Y; animated keys were ~(0,0,0)). Loaded in three.js / any spec-compliant glTF viewer the whole character therefore sank 0.474 units below the origin: measured hipWorldY 0.000, skinnedPoseY -0.481..0.527.",
+      "fix": "Added (0, 0, 0.47392287850379944) to every Hip translation keyframe of each clip (369 + 173 + 375 keys). Every other joint hangs off the Hip, so this is a rigid vertical translation - the authored poses are preserved.",
+      "verified": "three.js render of the optimised web file: hipWorldY 0.474, skinnedPoseY -0.007..1.001, feet on the y=0 grid for idle and look_around; sit reads as a seated pose.",
+      "caveat": "The sit clip keeps the hip at standing height (feet ~0.17 above the ground), i.e. it is authored for a seat/stool, not the floor. If the game wants a floor-level sit, lower the character ~0.17 for that clip.",
+      "revert": "subtract (0, 0, 0.47392287850379944) from the Hip translation keys of each clip"
+    }
+  ],
+  "visual_verdict": "Close to the reference. Present and correct: tan flat cap with brim, thick grey moustache, grey brows, big expressive eyes, wiry lean build, long thin bare legs, white ribbed tank under an open short-sleeved faded-tan shirt (chest pocket), worn knee-length shorts, brown lace-up shoes, matte toon look. Differences: the 3D shading is a touch more PBR/realistic than the flat toon illustration, the face is slightly narrower and the cap brim reads flatter than the reference. No holes, no broken limbs, no missing parts; textures clean after the webp/1024 optimise.",
+  "known_limits": [
+    "Clips were retargeted with --animate-in-place, so there is no root translation - the game must drive movement itself.",
+    "All three clips animate the same rig; only the three listed clips are in the file.",
+    "The raw 57 MB export is not what the browser should load - use manuel-web.glb (3.3 MB, meshopt + webp)."
+  ]
+}

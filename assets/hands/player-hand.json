@@ -1,0 +1,95 @@
+{
+  "asset": "player-hand-web.glb",
+  "what": "Single stylized toon right hand (wrist to mid-forearm), player's hand for repite-y-tranca.",
+  "art_direction": "stylized toon cartoon game art, rounded simple shapes, clean matte colors, big expressive appeal, friendly mobile-game look",
+  "reference_image": "docs/refs/hand.png",
+  "reference_review": "Read OK: a stylized toon 3D render of a relaxed right hand, warm terracotta / deep brown matte skin, pale rounded fingernails, fingers gently drooping and curled, wrist cut off cleanly at mid-forearm to the right of frame, plain light-grey backdrop. All five digits present, no defects. Used directly as the image-to-3D input.",
+  "pipeline": {
+    "generate": "tripo make docs/refs/hand.png  (image-to-3D, v3.1-20260211, 30 credits)",
+    "rig_check": "tripo anim check <model.glb>  (free)",
+    "optimize": "npx -y @gltf-transform/cli optimize <in.glb> <out.glb> --texture-size 1024 --texture-compress webp --simplify true --simplify-ratio 0.5 --compress meshopt",
+    "preview": "node studio/shot.mjs \"http://127.0.0.1:4174/assets/props/_view/viewer.html?m=<web.glb>\" <preview.png> 12000 1024 1024   (4 orthogonal views + 3/4, headless Edge)"
+  },
+  "handedness_and_orientation": {
+    "convention": "glTF/three.js Y-up, right-handed; +Y is up. Model is centred on the origin.",
+    "up_axis_+Y": "back of the hand (dorsal side). Palm faces -Y.",
+    "fingers_point": "+Z (fingertips at z = +0.50; index finger is the longest, reaching the +Z extreme)",
+    "wrist_end": "-Z, cut flat at the mid-forearm (z = -0.50). This is the axis to socket into a forearm.",
+    "thumb_side": "+X (a right hand: dorsal +Y, fingers +Z, thumb +X)",
+    "handedness": "right hand",
+    "longest_axis": "Z, exactly 1.000 unit (Tripo normalises the longest side to 1.0)",
+    "how_measured": [
+      "gltf-transform decoded the meshopt+quantised positions; bbox computed from every vertex in world space.",
+      "Independent cross-check: the render page recomputes Box3 from the loaded GLB in three.js and prints it; both agree exactly (X 0.560, Y 0.535, Z 1.000, min [-0.280, -0.267, -0.500]).",
+      "Fingers vs wrist and the thumb side were confirmed visually on player-hand-preview.png (4 orthogonal views) and player-hand-orientation.png (labelled top-down, screen-up = +Z)."
+    ],
+    "gameplay_note": "For a first-person seat, place the hand at the player's edge of the table with the wrist end (-Z) toward the player and fingers (+Z) reaching the board. Scale by 1/1.0 for a hand ~1.0 unit long; a real hand+wrist is ~0.20-0.25 m."
+  },
+  "performance_note": "749,302 triangles (the v3.1 source was 1,498,606; --simplify-ratio 0.5 halves it). Heavy for mobile web \u2014 re-run the same optimize command with --simplify-ratio 0.1 for ~150k tris at no credit cost if the frame budget is tight.",
+  "name": "player-hand",
+  "task_id": "488c5857-8b9d-4241-94ac-b7fa8e30cf49",
+  "task_type": "image_to_model",
+  "model_version": "v3.1-20260211",
+  "credits": 30,
+  "prompt": "image-to-3D from docs/refs/hand.png (no text prompt)",
+  "web_glb": "assets/hands/player-hand-web.glb",
+  "web_glb_bytes": 3752724,
+  "web_glb_sha256_16": "2a8791eb940e361b",
+  "preview": "assets/hands/player-hand-preview.png",
+  "source_glb": "assets/hands/tripo-out/tripo-out/hand-player-488c5857/model.glb",
+  "source_glb_bytes": 42754888,
+  "source_glb_sha256_16": "2e907222bb6f2e2e",
+  "geometry": {
+    "meshes": 1,
+    "primitives": 1,
+    "triangles": 749302,
+    "vertices": 387808,
+    "animations": 0,
+    "skins": 0
+  },
+  "bounds_world_units": {
+    "min": [
+      -0.2801,
+      -0.2673,
+      -0.5
+    ],
+    "max": [
+      0.2801,
+      0.2673,
+      0.5
+    ],
+    "size_xyz": [
+      0.5601,
+      0.5346,
+      1
+    ],
+    "longest_axis": "Z",
+    "note": "Y-up, centred on origin; longest side normalised to 1.0 unit by Tripo."
+  },
+  "materials": [
+    "tripo_material_488c5857-8b9d-4241-94ac-b7fa8e30cf49"
+  ],
+  "textures": [
+    "Color_488c5857-8b9d-4241-94ac-b7fa8e30cf49[image/webp]",
+    "ORM_488c5857-8b9d-4241-94ac-b7fa8e30cf49[image/webp]",
+    "NormalGL_488c5857-8b9d-4241-94ac-b7fa8e30cf49[image/webp]"
+  ],
+  "extensions_used": [
+    "EXT_meshopt_compression",
+    "EXT_texture_webp",
+    "KHR_mesh_quantization"
+  ],
+  "compression": "EXT_meshopt_compression + KHR_mesh_quantization (int16 positions) + EXT_texture_webp",
+  "visual_verdict": "STRONG. Reads exactly as the reference: warm deep-brown matte skin, rounded toon forms, five fingers in a relaxed gentle curl, pale rounded nails, clean flat wrist cut. Clean silhouette in all four orthogonal views, no holes, no artifacts, no stray geometry. Ships as-is.",
+  "usage_note": null,
+  "extra_preview": "assets/hands/player-hand-orientation.png",
+  "rig_check": {
+    "task_id": "7a8fc2a4-2eb6-4211-8643-6b713333cbd7",
+    "endpoint": "animate_prerigcheck",
+    "riggable": false,
+    "rig_type": "others",
+    "credits": 0,
+    "verdict": "NOT riggable (rig_type 'others'). Expected for a single hand; taken as-is and not rigged, per brief. Any finger motion must be authored by hand or the mesh split at the wrist."
+  },
+  "credits_total_this_asset": 30
+}

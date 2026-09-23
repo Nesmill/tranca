@@ -1,0 +1,104 @@
+{
+  "character": "ramon",
+  "reference_image": "docs/refs/ramon.png",
+  "generator_model": "v3.1-20260211",
+  "pipeline": "tripo-cli image-to-3D -> rig-check -> rig(rig-v1.0) -> single retarget -> gltf-transform optimize",
+  "tasks": {
+    "generate": {
+      "task_id": "e0be645b-3461-4ac3-a3ed-cbb6e4ea6108",
+      "type": "image_to_model",
+      "status": "success",
+      "credits": 30
+    },
+    "rig_check": {
+      "task_id": "c3f508d7-3d3e-49bd-b644-b640657c5f2b",
+      "type": "animate_prerigcheck",
+      "status": "success",
+      "credits": 0
+    },
+    "rig": {
+      "task_id": "7e03e6fa-f17a-4543-b7d2-5d3a3d7d8a55",
+      "type": "animate_rig",
+      "status": "success",
+      "param": "model=rig-v1.0",
+      "credits": 25
+    },
+    "retarget": {
+      "task_id": "2500a9bc-5dd4-444a-8736-8cddd9508bf6",
+      "type": "animate_retarget",
+      "status": "success",
+      "credits": 30
+    }
+  },
+  "rig_status": {
+    "riggable": true,
+    "rig_type": "biped",
+    "rig_model": "rig-v1.0",
+    "legged": true,
+    "joint_count": 41,
+    "leg_joints_present": ["L_Thigh", "L_Calf", "L_Foot", "L_ToeBase", "R_Thigh", "R_Calf", "R_Foot", "R_ToeBase"],
+    "skinned_mesh_count": 1
+  },
+  "clips": [
+    { "name": "preset:biped:idle", "duration_s": 15 },
+    { "name": "preset:biped:sit", "duration_s": 7 },
+    { "name": "preset:biped:look_around", "duration_s": 16 }
+  ],
+  "clip_count": 3,
+  "retarget_flags": ["--animate-in-place", "--out-format", "glb"],
+  "files": {
+    "raw_glb": {
+      "path": "assets/characters3d/ramon/ramon.glb",
+      "bytes": 59409752,
+      "sha256_16": "96087b40e9c9cf3a",
+      "textures": "3x image/jpeg",
+      "vertices": 760263
+    },
+    "web_glb": {
+      "path": "assets/characters3d/ramon/ramon-web.glb",
+      "bytes": 3531852,
+      "sha256_16": "690cb139ef514cab",
+      "textures": "3x image/webp 1024x1024",
+      "vertices": 276078,
+      "extensions": ["EXT_meshopt_compression", "EXT_texture_webp", "KHR_mesh_quantization"],
+      "optimize_command": "npx -y @gltf-transform/cli optimize assets/characters3d/ramon/ramon.glb assets/characters3d/ramon/ramon-web.glb --texture-size 1024 --texture-compress webp --simplify true --simplify-ratio 0.35 --compress meshopt"
+    },
+    "preview": {
+      "path": "assets/characters3d/ramon/ramon-preview.png",
+      "bytes": 138410,
+      "note": "Tripo server-side render of the rigged model (browser renderer unavailable in this session)"
+    }
+  },
+  "measurements": {
+    "height_units_raw": 0.99997,
+    "height_units_web": 0.99994,
+    "height_units": 1.0,
+    "origin": "at feet (skinned rest bbox min Y = 0.00001 raw / 0.00006 web)",
+    "facing": "+X",
+    "facing_evidence": {
+      "L_Foot_to_L_ToeBase": [0.03764, -0.00313, -0.00358],
+      "R_Foot_to_R_ToeBase": [0.04088, -0.00572, 0.01133],
+      "dominant_axis_both_sides": "+X",
+      "method": "world-space rest translations of L/R_Foot and L/R_ToeBase, composed from the node hierarchy"
+    },
+    "bbox_units": { "x_depth": 0.26537, "y_height": 1.0, "z_arm_span": 0.53249 },
+    "scale_note": "Tripo normalizes to 1.0 unit tall; scale the node ~1.8x in-engine for human size"
+  },
+  "verification": [
+    "raw GLB: 1 skin, 1 skinned mesh, 3 animation clips, 41 joints incl. L/R_Thigh/Calf/Foot/ToeBase (parsed from GLB bytes)",
+    "web GLB: same skin/clip/joint counts after meshopt decode; skinned rest bbox identical to raw within 5e-5 units (KHR_mesh_quantization remap is compensated by the inverse bind matrices, so scale is NOT doubled)",
+    "web GLB vertex count 276078 vs raw 760263 (simplify ratio 0.363); size 59.41 MB -> 3.53 MB",
+    "raw sha256[:16] 96087b40e9c9cf3a"
+  ],
+  "credits": {
+    "spent": 85,
+    "budget": 100,
+    "breakdown": { "generate": 30, "rig_check": 0, "rig": 25, "retarget": 30 },
+    "retries": 0
+  },
+  "visual_verdict": {
+    "match": "very close",
+    "matches": ["warm deep brown skin", "short black hair", "light stubble/goatee", "white short-sleeved guayabera with pleated pockets", "light khaki trousers", "brown slide sandals", "broad heavyset build", "toon/stylized shading", "friendly smile"],
+    "off": ["eyes are stylized but less exaggeratedly big than the reference's cartoon eyes", "face reads slightly younger than ~40", "fingers slightly merged/clustered on both hands (typical generated-hand artifact)"]
+  }
+}

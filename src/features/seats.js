@@ -80,10 +80,9 @@ const MIN_PLATE_Y = 96;
 // The generated cast (assets/characters3d/): rigged, retargeted Tripo models,
 // meshopt-compressed and texture-shrunk for the web. Each GLB is 1.0 unit
 // tall with its origin at the feet and its forward on +X (see the manifest).
-// The exports measure ~0.7 units tall (the manifest's "height 1.0" is wrong;
-// measured from screenshots: 1.18 left only the crown over the table rim).
-// 1.75 puts the head top just above the rim, legs hidden by the table.
-const GLB_SCALE = 1.75;
+// The toon exports measure exactly 1.0 units tall (verified from bytes);
+// 1.2 puts the head top just above the table rim with the legs hidden.
+const GLB_SCALE = 1.2;
 const BODY_YAW_MAX = 0.5; // a body turns toward the action less than a head does
 const glbName = (label) => label.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 

@@ -1,0 +1,409 @@
+{
+  "asset_set": "colmado prop kit (6 pieces)",
+  "what": "Text-to-3D props for the repite-y-tranca colmado (corner shop) scene.",
+  "art_direction": "stylized toon cartoon game art, rounded simple shapes, clean matte colors, big expressive appeal, friendly mobile-game look",
+  "pipeline": {
+    "generate": "tripo make \"<prompt>\"  (text-to-3D, v3.1-20260211, 20 credits each; no rigging needed or attempted for props)",
+    "optimize": "npx -y @gltf-transform/cli optimize <in.glb> <out.glb> --texture-size 1024 --texture-compress webp --simplify true --simplify-ratio 0.5 --compress meshopt",
+    "preview": "node studio/shot.mjs \"http://127.0.0.1:4174/assets/props/_view/viewer.html?m=<web.glb>\" <preview.png> 12000 1024 1024"
+  },
+  "common": {
+    "orientation": "Y-up, centred on the origin, longest side normalised to 1.0 unit by Tripo.",
+    "bounds_source": "gltf-transform decoded positions (meshopt + int16 quantisation) summed over every vertex in world space; cross-checked against three.js Box3 in the preview page.",
+    "texture_budget": "1024 px, webp, ORM + normal map kept"
+  },
+  "performance_warning": {
+    "issue": "Every asset is ~710k-750k triangles because v3.1 geometry is dense and --simplify-ratio 0.5 only halves it (hand source 1,498,606 tris -> 749,302; props ~1.45M -> ~720k each). Roughly 5.0M triangles for the 7 shipped assets, plus three 1024 px texture sets each.",
+    "why": "The optimize command in the brief pins --simplify-ratio 0.5, which was followed exactly.",
+    "fix_if_needed": "Re-run the same optimize command at a lower ratio for web, e.g. --simplify-ratio 0.1 (~150k tris) or 0.05 (~75k tris), or decimate further with 'npx -y @gltf-transform/cli simplify <in.glb> <out.glb> --ratio 0.1'. Costs no credits."
+  },
+  "props": [
+    {
+      "name": "shelf",
+      "task_id": "9fcd20c3-4e1a-4b7b-86cf-496313567538",
+      "task_type": "text_to_model",
+      "model_version": "v3.1-20260211",
+      "credits": 20,
+      "prompt": "stylized toon cartoon game prop, rounded simple shapes, clean matte colors, friendly mobile game style: a wooden wall shelf unit stocked with stacked domino boxes and a few glass bottles",
+      "web_glb": "assets/props/shelf-web.glb",
+      "web_glb_bytes": 3891448,
+      "web_glb_sha256_16": "d09baa4def37beec",
+      "preview": "assets/props/shelf-preview.png",
+      "source_glb": "assets/props/tripo-out/shelf/tripo-out/prop-shelf-9fcd20c3/model.glb",
+      "source_glb_bytes": 41357420,
+      "source_glb_sha256_16": "a845ccf203b92677",
+      "geometry": {
+        "meshes": 1,
+        "primitives": 1,
+        "triangles": 710756,
+        "vertices": 387733,
+        "animations": 0,
+        "skins": 0
+      },
+      "bounds_world_units": {
+        "min": [
+          -0.1803,
+          -0.5,
+          -0.4643
+        ],
+        "max": [
+          0.1803,
+          0.5,
+          0.4643
+        ],
+        "size_xyz": [
+          0.3606,
+          1,
+          0.9287
+        ],
+        "longest_axis": "Y",
+        "note": "Y-up, centred on origin; longest side normalised to 1.0 unit by Tripo."
+      },
+      "materials": [
+        "tripo_material_9fcd20c3-4e1a-4b7b-86cf-496313567538"
+      ],
+      "textures": [
+        "Color_9fcd20c3-4e1a-4b7b-86cf-496313567538[image/webp]",
+        "ORM_9fcd20c3-4e1a-4b7b-86cf-496313567538[image/webp]",
+        "NormalGL_9fcd20c3-4e1a-4b7b-86cf-496313567538[image/webp]"
+      ],
+      "extensions_used": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "compression": "EXT_meshopt_compression + KHR_mesh_quantization (int16 positions) + EXT_texture_webp",
+      "visual_verdict": "VERY GOOD. Reads instantly as a colmado wall shelf: three wooden shelves, stacked domino boxes with visible pips, teal glass bottles and a small jar, thick rounded toon timber. Nothing floats. Content faces +X; the flat back panel is at -X, so set it against a wall at -X (or rotate).",
+      "usage_note": "Front/contents face +X (depth 0.361 on X); back panel at -X. Put the back at -X against a wall."
+    },
+    {
+      "name": "radio",
+      "task_id": "d9fdc04a-87c9-4220-a3b9-cbfa9f8ec36f",
+      "task_type": "text_to_model",
+      "model_version": "v3.1-20260211",
+      "credits": 20,
+      "prompt": "stylized toon cartoon game prop, rounded simple shapes, clean matte colors, friendly mobile game style: an old portable radio with a round speaker grille and two knobs",
+      "web_glb": "assets/props/radio-web.glb",
+      "web_glb_bytes": 3932580,
+      "web_glb_sha256_16": "643c746b05769bd9",
+      "preview": "assets/props/radio-preview.png",
+      "source_glb": "assets/props/tripo-out/radio/tripo-out/prop-radio-d9fdc04a/model.glb",
+      "source_glb_bytes": 41329472,
+      "source_glb_sha256_16": "4ac9d720f77d023b",
+      "geometry": {
+        "meshes": 1,
+        "primitives": 1,
+        "triangles": 711850,
+        "vertices": 385542,
+        "animations": 0,
+        "skins": 0
+      },
+      "bounds_world_units": {
+        "min": [
+          -0.289,
+          -0.3854,
+          -0.5
+        ],
+        "max": [
+          0.289,
+          0.3854,
+          0.5
+        ],
+        "size_xyz": [
+          0.5779,
+          0.7707,
+          1
+        ],
+        "longest_axis": "Z",
+        "note": "Y-up, centred on origin; longest side normalised to 1.0 unit by Tripo."
+      },
+      "materials": [
+        "tripo_material_d9fdc04a-87c9-4220-a3b9-cbfa9f8ec36f"
+      ],
+      "textures": [
+        "Color_d9fdc04a-87c9-4220-a3b9-cbfa9f8ec36f[image/webp]",
+        "ORM_d9fdc04a-87c9-4220-a3b9-cbfa9f8ec36f[image/webp]",
+        "NormalGL_d9fdc04a-87c9-4220-a3b9-cbfa9f8ec36f[image/webp]"
+      ],
+      "extensions_used": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "compression": "EXT_meshopt_compression + KHR_mesh_quantization (int16 positions) + EXT_texture_webp",
+      "visual_verdict": "GOOD. Clearly a chunky retro portable radio: round black speaker grille in a white bezel, two knobs, a carry handle, a dark top button. Slightly glossier and more saturated than 'clean matte', but firmly in friendly mobile-game territory. Face is +X.",
+      "usage_note": "Face (grille + knobs) is +X; depth 0.578 on X, width 1.000 on Z, height 0.771 on Y."
+    },
+    {
+      "name": "crate",
+      "task_id": "ef1e0600-bfc4-4e58-99f0-7cf409d440b1",
+      "task_type": "text_to_model",
+      "model_version": "v3.1-20260211",
+      "credits": 20,
+      "prompt": "stylized toon cartoon game prop, rounded simple shapes, clean matte colors, friendly mobile game style: a wooden crate of glass soda bottles",
+      "web_glb": "assets/props/crate-web.glb",
+      "web_glb_bytes": 4231568,
+      "web_glb_sha256_16": "33ca089d7602c0a4",
+      "preview": "assets/props/crate-preview.png",
+      "source_glb": "assets/props/tripo-out/crate/tripo-out/prop-crate-ef1e0600/model.glb",
+      "source_glb_bytes": 42718304,
+      "source_glb_sha256_16": "1a6b129fc4e81ca5",
+      "geometry": {
+        "meshes": 1,
+        "primitives": 1,
+        "triangles": 728874,
+        "vertices": 401880,
+        "animations": 0,
+        "skins": 0
+      },
+      "bounds_world_units": {
+        "min": [
+          -0.5,
+          -0.4939,
+          -0.4963
+        ],
+        "max": [
+          0.5,
+          0.4939,
+          0.4963
+        ],
+        "size_xyz": [
+          1,
+          0.9878,
+          0.9926
+        ],
+        "longest_axis": "X",
+        "note": "Y-up, centred on origin; longest side normalised to 1.0 unit by Tripo."
+      },
+      "materials": [
+        "tripo_material_ef1e0600-bfc4-4e58-99f0-7cf409d440b1"
+      ],
+      "textures": [
+        "Color_ef1e0600-bfc4-4e58-99f0-7cf409d440b1[image/webp]",
+        "ORM_ef1e0600-bfc4-4e58-99f0-7cf409d440b1[image/webp]",
+        "NormalGL_ef1e0600-bfc4-4e58-99f0-7cf409d440b1[image/webp]"
+      ],
+      "extensions_used": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "compression": "EXT_meshopt_compression + KHR_mesh_quantization (int16 positions) + EXT_texture_webp",
+      "visual_verdict": "EXCELLENT. Open slatted wooden crate holding seven teal glass soda bottles with orange caps; the glass read is convincing and every bottle sits properly on the crate floor. Almost exactly cubic (1.000 x 0.988 x 0.993).",
+      "usage_note": "Sits flat on -Y; open top faces +Y."
+    },
+    {
+      "name": "lamp",
+      "task_id": "7eabf5ba-f41d-43ff-8bb8-299e2da52b65",
+      "task_type": "text_to_model",
+      "model_version": "v3.1-20260211",
+      "credits": 20,
+      "prompt": "stylized toon cartoon game prop, rounded simple shapes, clean matte colors, friendly mobile game style: a plain hanging pendant light, a simple dark enamel dome lamp shade over a bare glass light bulb, thin straight cord going up, no face, no eyes, no mouth, no smile, no decoration",
+      "web_glb": "assets/props/lamp-web.glb",
+      "web_glb_bytes": 3656936,
+      "web_glb_sha256_16": "cac469bc7e58b5fa",
+      "preview": "assets/props/lamp-preview.png",
+      "source_glb": "assets/props/tripo-out/lamp2/tripo-out/prop-lamp2-7eabf5ba/model.glb",
+      "source_glb_bytes": 41160804,
+      "source_glb_sha256_16": "4f01fa1cfa8b3430",
+      "geometry": {
+        "meshes": 1,
+        "primitives": 1,
+        "triangles": 721059,
+        "vertices": 375794,
+        "animations": 0,
+        "skins": 0
+      },
+      "bounds_world_units": {
+        "min": [
+          -0.4965,
+          -0.5,
+          -0.4989
+        ],
+        "max": [
+          0.4965,
+          0.5,
+          0.4988
+        ],
+        "size_xyz": [
+          0.993,
+          1,
+          0.9977
+        ],
+        "longest_axis": "Y",
+        "note": "Y-up, centred on origin; longest side normalised to 1.0 unit by Tripo."
+      },
+      "materials": [
+        "tripo_material_7eabf5ba-f41d-43ff-8bb8-299e2da52b65"
+      ],
+      "textures": [
+        "Color_7eabf5ba-f41d-43ff-8bb8-299e2da52b65[image/webp]",
+        "ORM_7eabf5ba-f41d-43ff-8bb8-299e2da52b65[image/webp]",
+        "NormalGL_7eabf5ba-f41d-43ff-8bb8-299e2da52b65[image/webp]"
+      ],
+      "extensions_used": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "compression": "EXT_meshopt_compression + KHR_mesh_quantization (int16 positions) + EXT_texture_webp",
+      "visual_verdict": "GOOD and clean: slate enamel dome, bare cream bulb below, thin cord above, no face. The dome is wide relative to the cord (0.993 x 1.000 x 0.998) so it reads as a big counter pendant; the slimmer first attempt is kept as lamp-alt-web.glb if a longer drop is wanted.",
+      "usage_note": "Hangs from -Y: cord top at y = +0.50, bulb bottom at y = -0.50. Suspension point is the cord end at +Y.",
+      "alternate": {
+        "task_id": "ad24f1fc-d87f-4342-980b-0c49db7857ad",
+        "glb": "assets/props/lamp-alt-web.glb",
+        "preview": "assets/props/lamp-alt-preview.png",
+        "credits": 20,
+        "note": "first attempt; Tripo put an unrequested smiley face on the bulb. Otherwise a nicer slimmer pendant (size 0.475 x 1.000 x 0.468). Shipped the face-free regen instead."
+      },
+      "regenerated_because": "ad24f1fc-d87f-4342-980b-0c49db7857ad"
+    },
+    {
+      "name": "fan",
+      "task_id": "af32a0cb-84da-4e80-ad7f-f48cd6523a86",
+      "task_type": "text_to_model",
+      "model_version": "v3.1-20260211",
+      "credits": 20,
+      "prompt": "stylized toon cartoon game prop, rounded simple shapes, clean matte colors, friendly mobile game style: a simple ceiling fan seen from directly underneath, three flat wooden blades radiating horizontally in a star shape from a small round hub, short straight ceiling rod on top, no wall mount, no fan cage, no guard",
+      "web_glb": "assets/props/fan-web.glb",
+      "web_glb_bytes": 3941648,
+      "web_glb_sha256_16": "42b7ebb153e50447",
+      "preview": "assets/props/fan-preview.png",
+      "source_glb": "assets/props/tripo-out/fan2/tripo-out/prop-fan2-af32a0cb/model.glb",
+      "source_glb_bytes": 42900056,
+      "source_glb_sha256_16": "44ff51f709ebfad2",
+      "geometry": {
+        "meshes": 1,
+        "primitives": 1,
+        "triangles": 745213,
+        "vertices": 392805,
+        "animations": 0,
+        "skins": 0
+      },
+      "bounds_world_units": {
+        "min": [
+          -0.3055,
+          -0.4835,
+          -0.5
+        ],
+        "max": [
+          0.3055,
+          0.4835,
+          0.5
+        ],
+        "size_xyz": [
+          0.6109,
+          0.9669,
+          1
+        ],
+        "longest_axis": "Z",
+        "note": "Y-up, centred on origin; longest side normalised to 1.0 unit by Tripo."
+      },
+      "materials": [
+        "tripo_material_af32a0cb-84da-4e80-ad7f-f48cd6523a86"
+      ],
+      "textures": [
+        "Color_af32a0cb-84da-4e80-ad7f-f48cd6523a86[image/webp]",
+        "ORM_af32a0cb-84da-4e80-ad7f-f48cd6523a86[image/webp]",
+        "NormalGL_af32a0cb-84da-4e80-ad7f-f48cd6523a86[image/webp]"
+      ],
+      "extensions_used": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "compression": "EXT_meshopt_compression + KHR_mesh_quantization (int16 positions) + EXT_texture_webp",
+      "visual_verdict": "MIXED \u2014 the weakest item. It is a clean all-wood fan with rounded toon blades (no plastic parts, good matte colour), but it is a 4-blade fan whose blade disc faces +X with a stem out the back, NOT the requested 3-blade horizontal ceiling fan. Fix cheaply: rotate it -90 deg about Z (rotation.z = -Math.PI/2) so the stem points up to the ceiling and the blades lie horizontal. Two separate text generations both returned 4 blades, so treat 'three blades' as unmet; deleting one blade by hand or accepting four are the options.",
+      "usage_note": "Blade disc faces +X. Apply rotation.z = -Math.PI/2 to hang it as a ceiling fan (stem up, blades horizontal).",
+      "alternate": {
+        "task_id": "03ddfc82-18a4-4775-98bf-0e675bba3479",
+        "glb": "assets/props/fan-alt-web.glb",
+        "preview": "assets/props/fan-alt-preview.png",
+        "credits": 20,
+        "note": "first attempt; 4 blades, orange wood plus a blue hub and a cream dome with a white mounting plate. Kept as a look alternate."
+      },
+      "regenerated_because": "03ddfc82-18a4-4775-98bf-0e675bba3479"
+    },
+    {
+      "name": "stool",
+      "task_id": "876bded0-b02b-4379-a50b-351e6d74039b",
+      "task_type": "text_to_model",
+      "model_version": "v3.1-20260211",
+      "credits": 20,
+      "prompt": "stylized toon cartoon game prop, rounded simple shapes, clean matte colors, friendly mobile game style: a tall wooden shop stool with four legs",
+      "web_glb": "assets/props/stool-web.glb",
+      "web_glb_bytes": 3862944,
+      "web_glb_sha256_16": "62b745faefc2ccee",
+      "preview": "assets/props/stool-preview.png",
+      "source_glb": "assets/props/tripo-out/stool/tripo-out/prop-stool-876bded0/model.glb",
+      "source_glb_bytes": 41983568,
+      "source_glb_sha256_16": "eedfec0107a588fe",
+      "geometry": {
+        "meshes": 1,
+        "primitives": 1,
+        "triangles": 727550,
+        "vertices": 388254,
+        "animations": 0,
+        "skins": 0
+      },
+      "bounds_world_units": {
+        "min": [
+          -0.3798,
+          -0.5,
+          -0.3866
+        ],
+        "max": [
+          0.3798,
+          0.5,
+          0.3866
+        ],
+        "size_xyz": [
+          0.7595,
+          1,
+          0.7732
+        ],
+        "longest_axis": "Y",
+        "note": "Y-up, centred on origin; longest side normalised to 1.0 unit by Tripo."
+      },
+      "materials": [
+        "tripo_material_876bded0-b02b-4379-a50b-351e6d74039b"
+      ],
+      "textures": [
+        "Color_876bded0-b02b-4379-a50b-351e6d74039b[image/webp]",
+        "ORM_876bded0-b02b-4379-a50b-351e6d74039b[image/webp]",
+        "NormalGL_876bded0-b02b-4379-a50b-351e6d74039b[image/webp]"
+      ],
+      "extensions_used": [
+        "EXT_meshopt_compression",
+        "EXT_texture_webp",
+        "KHR_mesh_quantization"
+      ],
+      "compression": "EXT_meshopt_compression + KHR_mesh_quantization (int16 positions) + EXT_texture_webp",
+      "visual_verdict": "GOOD. A tall wooden stool with four legs (counted in the front views), a round seat with a purple cushion and yellow cross-rungs, rounded feet. Colours are more saturated and 'sporty' than clean matte, but it is appealing and unmistakably a shop stool.",
+      "usage_note": "Stands on -Y; seat top at y = +0.50. 0.760 x 1.000 x 0.773 \u2014 about 0.76 m wide for a 1.0 m tall stool."
+    }
+  ],
+  "credits": {
+    "per_prop": 20,
+    "props_subtotal": 120,
+    "regenerations": 40,
+    "hand": 30,
+    "rig_check": 0,
+    "total_spent_this_task": 190,
+    "budget": 220,
+    "task_ids_all": [
+      "03ddfc82-18a4-4775-98bf-0e675bba3479",
+      "488c5857-8b9d-4241-94ac-b7fa8e30cf49",
+      "7a8fc2a4-2eb6-4211-8643-6b713333cbd7",
+      "7eabf5ba-f41d-43ff-8bb8-299e2da52b65",
+      "876bded0-b02b-4379-a50b-351e6d74039b",
+      "9fcd20c3-4e1a-4b7b-86cf-496313567538",
+      "ad24f1fc-d87f-4342-980b-0c49db7857ad",
+      "af32a0cb-84da-4e80-ad7f-f48cd6523a86",
+      "d9fdc04a-87c9-4220-a3b9-cbfa9f8ec36f",
+      "ef1e0600-bfc4-4e58-99f0-7cf409d440b1"
+    ],
+    "note": "The API balance is shared: the account also lost credits to parallel agents working on characters in the same session, so a raw balance delta overstates this task's spend. The figures above are the per-task credits_consumed values reported by the CLI."
+  },
+  "shared_render_tool": "assets/props/_view/viewer.html"
+}

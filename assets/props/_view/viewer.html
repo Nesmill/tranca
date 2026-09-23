@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>asset-viewer</title>
+<style>
+  html,body{margin:0;padding:0;background:#dfe3e8;overflow:hidden;font:600 15px/1.3 system-ui,sans-serif;color:#1b2430}
+  #c{position:fixed;inset:0;width:100vw;height:100vh;display:block}
+  .lbl{position:fixed;background:rgba(255,255,255,.82);padding:3px 9px;border-radius:5px;
+       font:700 14px/1.25 system-ui,sans-serif;letter-spacing:.03em;pointer-events:none}
+  #meas{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.88);padding:6px 10px;
+        font:700 15px/1.4 ui-monospace,monospace;pointer-events:none;white-space:pre-wrap}
+  #err{position:fixed;top:0;left:0;right:0;background:#b3261e;color:#fff;padding:8px 10px;
+       font:700 14px/1.4 ui-monospace,monospace;white-space:pre-wrap;display:none;pointer-events:none}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="err"></div>
+<div class="lbl" style="left:10px;top:10px">VIEW FROM +Z (front)</div>
+<div class="lbl" style="right:10px;top:10px">VIEW FROM +X (right)</div>
+<div class="lbl" style="left:10px;bottom:64px">VIEW FROM +Y (top, looking down)</div>
+<div class="lbl" style="right:10px;bottom:64px">VIEW 3/4 (front-right-above)</div>
+<div id="meas">loading…</div>
+<script type="importmap">
+{"imports":{
+  "three":"/lib/three/three.module.js",
+  "three/addons/":"/lib/three/addons/"
+}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+
+const q = new URLSearchParams(location.search);
+const FILE = q.get('m');
+const err = (m) => { const e = document.getElementById('err'); e.style.display='block'; e.textContent = String(m); };
+
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setClearColor(0xdfe3e8, 1);
+
+const scene = new THREE.Scene();
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8d949c, 2.4));
+const key = new THREE.DirectionalLight(0xffffff, 2.6); key.position.set(3.2, 5.0, 4.2); scene.add(key);
+const rim = new THREE.DirectionalLight(0xffffff, 1.5); rim.position.set(-4.0, 2.2, -3.4); scene.add(rim);
+const fill = new THREE.DirectionalLight(0xffffff, 1.0); fill.position.set(1.0, -3.0, 1.6); scene.add(fill);
+
+const loader = new GLTFLoader();
+loader.setMeshoptDecoder(MeshoptDecoder);
+
+function fmt(n){ return (Math.round(n*1000)/1000).toFixed(3); }
+
+loader.load(FILE, (gltf) => {
+  const root = gltf.scene;
+  scene.add(root);
+
+  const box = new THREE.Box3().setFromObject(root);
+  const size = new THREE.Vector3(); box.getSize(size);
+  const ctr = new THREE.Vector3(); box.getCenter(ctr);
+
+  // wireframe bbox + coloured axes at the box's min corner (R=+X G=+Y B=+Z)
+  const boxHelper = new THREE.Box3Helper(box.clone(), 0x2b3a4a);
+  boxHelper.material.depthTest = false; boxHelper.material.transparent = true; boxHelper.material.opacity = 0.55;
+  scene.add(boxHelper);
+  const ax = new THREE.AxesHelper(Math.max(size.x, size.y, size.z) * 0.85);
+  ax.position.copy(box.min); ax.material.depthTest = false; scene.add(ax);
+
+  // count meshes / animations from the loaded scene graph
+  let meshes = 0, tris = 0;
+  root.traverse(o => { if (o.isMesh) { meshes++; const g = o.geometry; tris += (g.index ? g.index.count : g.attributes.position.count) / 3; } });
+
+  document.getElementById('meas').textContent =
+    `${FILE}\nmeshes ${meshes}  tris ${Math.round(tris)}  anims ${gltf.animations.length}` +
+    `  |  size X ${fmt(size.x)} Y ${fmt(size.y)} Z ${fmt(size.z)} units` +
+    `  |  min [${fmt(box.min.x)}, ${fmt(box.min.y)}, ${fmt(box.min.z)}] max [${fmt(box.max.x)}, ${fmt(box.max.y)}, ${fmt(box.max.z)}]` +
+    `  |  axes helper R=+X G=+Y B=+Z`;
+
+  const R = Math.max(size.x, size.y, size.z) * 0.62 + 0.02; // fit radius per view
+  const W = renderer.domElement.clientWidth || 1024, H = renderer.domElement.clientHeight || 1024;
+  const D = box.getSize(new THREE.Vector3()).length();
+
+  const MODE = q.get('views') || 'grid';
+  if (MODE === 'topup') {
+    // single full-frame view from +Y with up = +Z, so screen-up = +Z and screen-right = -X
+    document.querySelectorAll('.lbl').forEach((e, i) => { e.style.display = i === 0 ? 'block' : 'none'; });
+    document.querySelector('.lbl').textContent = 'TOP-DOWN from +Y | screen-UP = +Z (fingers) | screen-RIGHT = -X | GREEN = +Y toward you';
+    const cam = new THREE.PerspectiveCamera(35, W / H, D * 0.01, D * 12);
+    cam.position.copy(ctr).add(new THREE.Vector3(0, 1, 0).multiplyScalar(D * 1.55));
+    cam.up.set(0, 0, 1);
+    cam.lookAt(ctr);
+    renderer.setSize(W, H, false);
+    renderer.render(scene, cam);
+    window.__rendered = true;
+    document.title = 'READY';
+    return;
+  }
+
+  const VIEWS = [
+    { p: [0, 0, 1], up: [0, 1, 0] },   // from +Z
+    { p: [1, 0, 0], up: [0, 1, 0] },   // from +X
+    { p: [0, 1, 0], up: [0, 0, -1] },  // from +Y
+    { p: [1, 0.75, 1], up: [0, 1, 0] } // 3/4
+  ];
+
+  function draw() {
+    renderer.setSize(W, H, false);
+    renderer.setScissorTest(true);
+    const hw = Math.floor(W / 2), hh = Math.floor(H / 2);
+    const quad = [[0, hh], [hw, hh], [0, 0], [hw, 0]]; // x, y (gl y-up: bottom-left origin)
+    for (let i = 0; i < 4; i++) {
+      const v = VIEWS[i];
+      const dir = new THREE.Vector3(...v.p).normalize();
+      const cam = new THREE.PerspectiveCamera(35, hw / hh, D * 0.01, D * 12);
+      cam.position.copy(ctr).add(dir.multiplyScalar(D * 1.55));
+      cam.up.set(...v.up);
+      cam.lookAt(ctr);
+      renderer.setViewport(quad[i][0], quad[i][1], hw, hh);
+      renderer.setScissor(quad[i][0], quad[i][1], hw, hh);
+      renderer.render(scene, cam);
+    }
+    renderer.setScissorTest(false);
+    window.__rendered = true;
+    document.title = 'READY';
+  }
+  draw();
+  window.__redraw = draw;
+}, undefined, (e) => err('LOAD FAILED: ' + (e && e.message ? e.message : e)));
+
+window.addEventListener('error', (e) => err('PAGE ERROR: ' + e.message));
+window.addEventListener('unhandledrejection', (e) => err('REJECTION: ' + (e.reason && e.reason.message ? e.reason.message : e.reason)));
+</script>
+</body>
+</html>

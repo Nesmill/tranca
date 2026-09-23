@@ -1,0 +1,3 @@
+# Pristine Tripo exports are large provenance only; the -web.glb files ship.
+tripo-out/
+rigcheck/

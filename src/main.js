@@ -8,6 +8,7 @@ import seats from './features/seats.js';
 import board from './features/board.js';
 import handStrip from './features/hand-strip.js';
 import hands from './features/hands.js';
+import props from './features/props.js';
 import hud from './features/hud.js';
 import signals from './features/signals.js';
 import sound from './features/sound.js';
@@ -39,6 +40,8 @@ export async function main() {
   // honours `?cast=primitives` to skip the generated models.
   const cast = ctx.params.cast === 'sprites' ? characters : seats;
   engine.register(cast);
+  // The generated colmado props dress the room world.js builds.
+  engine.register(props);
   engine.register(board);
   // Registered after the board: the hands read the layout the board just wrote.
   engine.register(hands);

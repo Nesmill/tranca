@@ -10,6 +10,8 @@
 
 import * as THREE from 'three';
 import { faceCanvas } from '../core/pips.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 
 // --- Tuning constants ---------------------------------------------------
 const SKIN = 0x7a4a2e;
@@ -91,11 +93,15 @@ export default {
       const hand = new THREE.Group();
       hand.position.copy(wrist);
       arm.add(hand);
+      // The built grip (palm + fingers) is a stand-in the generated hand
+      // replaces on load; keeping it grouped makes the swap one flag.
+      const grip = new THREE.Group();
+      hand.add(grip);
 
       const palm = new THREE.Mesh(track(new THREE.SphereGeometry(HAND_R, 14, 12)), skin);
       palm.scale.set(1.2, 0.62, 1.3);
       palm.castShadow = true;
-      hand.add(palm);
+      grip.add(palm);
 
       const fingerGeo = track(new THREE.CapsuleGeometry(FINGER_R, FINGER_LEN, 4, 8));
       for (let i = 0; i < 4; i += 1) {
@@ -105,21 +111,52 @@ export default {
         finger.rotation.x = Math.PI / 2;
         finger.rotation.z = mirror * across * 1.6;
         finger.castShadow = true;
-        hand.add(finger);
+        grip.add(finger);
       }
       const thumb = new THREE.Mesh(fingerGeo, skin);
       thumb.position.set(mirror * HAND_R * 1.15, -0.004, HAND_R * 0.5);
       thumb.rotation.set(Math.PI / 2.6, 0, mirror * 0.5);
       thumb.castShadow = true;
-      hand.add(thumb);
+      grip.add(thumb);
 
       arm.position.set(0, 0, 0);
-      return { arm, hand, rest };
+      return { arm, hand, grip, rest };
     };
 
     this.right = makeArm({ ...REST }, 1);
     this.left = makeArm({ ...LEFT_REST }, -1);
     this.group.add(this.right.arm, this.left.arm);
+
+    // The generated toon hand replaces the built grip as soon as it arrives:
+    // one shared export, mirrored for the left side (the export is a right
+    // hand: fingers +Z, thumb +X, wrist cut at -Z). The wrist end tucks into
+    // the forearm cap and the forearm itself keeps reaching off-frame. A
+    // failed load leaves the built grip in place.
+    const HAND_SCALE = 0.13;
+    const loader = new GLTFLoader();
+    loader.setMeshoptDecoder(MeshoptDecoder);
+    loader.load('assets/hands/player-hand-web.glb', (gltf) => {
+      const proto = gltf.scene;
+      proto.traverse((o) => {
+        if (o.isMesh) {
+          o.castShadow = true;
+          const mats = Array.isArray(o.material) ? o.material : [o.material];
+          for (const mat of mats) if (mat) mat.side = THREE.DoubleSide;
+        }
+      });
+      this.handModel = proto;
+      for (const [side, sx] of [[this.right, 1], [this.left, -1]]) {
+        const model = sx === 1 ? proto : proto.clone();
+        model.scale.set(sx * HAND_SCALE, HAND_SCALE, HAND_SCALE);
+        // Turn the fingers toward the table (-Z), which swings the thumb
+        // inward like a real hand reaching out to set a tile down.
+        model.rotation.y = Math.PI;
+        model.position.z = -0.5 * HAND_SCALE;
+        side.grip.visible = false;
+        side.hand.add(model);
+      }
+      ctx.log('hands: generated hand in (mirrored left)');
+    }, undefined, (err) => ctx.log(`hands: hand GLB failed (${err?.message ?? err}); keeping the built grip`));
 
     // The tile the right hand carries while making a play.
     const canvas = faceCanvas(6, 6, 128, 64);
@@ -249,6 +286,16 @@ export default {
 
   dispose() {
     this.group?.parent?.remove(this.group);
+    this.handModel?.traverse((o) => {
+      if (o.isMesh) {
+        o.geometry?.dispose();
+        const mats = Array.isArray(o.material) ? o.material : [o.material];
+        for (const mat of mats) {
+          mat?.map?.dispose();
+          mat?.dispose();
+        }
+      }
+    });
     for (const o of this.disposables ?? []) o.dispose?.();
     this.disposables = [];
     this.faces?.clear();

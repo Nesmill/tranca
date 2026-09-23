@@ -1,0 +1,92 @@
+{
+  "character": "yolanda",
+  "pipeline": "image-to-3D (Tripo CLI) → rig-check → rig(rig-v1.0) → retarget → web optimize",
+  "reference_image": "docs/refs/yolanda-flare.png",
+  "reference_validated": true,
+
+  "task_ids": {
+    "gen": "cf0da287-1847-46d2-bd3a-90f9725b5c5c",
+    "gen_type": "image_to_model",
+    "gen_model": "v3.1-20260211",
+    "rig_check": "a7d16ed7-23a3-4429-9626-0a02997f0f52",
+    "rig_check_result": { "riggable": false, "rig_type": "biped" },
+    "rig_check_diagnostic_orientation_fix": "f9834ee9-8ec9-4af2-adcf-25cbae56808a",
+    "rig": "3453ea0a-52cb-4a38-aedc-44240d35dcde",
+    "rig_model": "rig-v1.0 (wire v1.0-20240301)",
+    "rig_type": "biped",
+    "retarget": "7ae9a1d1-165d-47c8-b9bb-02c6f30e6d9b"
+  },
+
+  "credits_spent": {
+    "this_pipeline": 85,
+    "breakdown": {
+      "image_to_model": 30,
+      "rig_check": 0,
+      "rig": 25,
+      "retarget": 30
+    },
+    "budget_cap": 100,
+    "note": "A pre-existing, superseded text-to-model attempt (gen b1ce7fab-c335-4dd1-b7ea-55ee561bc4c6 / check 30de94c4 / rig 3f237170 / retarget ad84e59c = 75 cr, from before this run) produced the old files that this image-based pipeline replaced."
+  },
+
+  "files": {
+    "raw_glb": {
+      "path": "assets/characters3d/yolanda/yolanda.glb",
+      "bytes": 60039280,
+      "mb": 60.04,
+      "sha256_16": "b3b1e7a2ccc3aec9"
+    },
+    "web_glb": {
+      "path": "assets/characters3d/yolanda/yolanda-web.glb",
+      "bytes": 3607208,
+      "mb": 3.61,
+      "sha256_16": "1339eb90c9115b83",
+      "optimize_flags": "--texture-size 1024 --texture-compress webp --simplify true --simplify-ratio 0.35 --compress meshopt",
+      "extensions": ["EXT_meshopt_compression", "EXT_texture_webp", "KHR_mesh_quantization"]
+    },
+    "preview": {
+      "path": "assets/characters3d/yolanda/yolanda-preview.png",
+      "bytes": 167773
+    }
+  },
+
+  "clips": [
+    { "name": "preset:biped:idle", "duration_s": 15.38, "channels": 126 },
+    { "name": "preset:biped:sit", "duration_s": 7.21, "channels": 126 },
+    { "name": "preset:biped:look_around", "duration_s": 15.62, "channels": 126 }
+  ],
+  "animate_in_place": true,
+
+  "rig_status": {
+    "rigged": true,
+    "riggable_reported_by_check": false,
+    "check_verdict_was_false_negative": true,
+    "evidence": "rig task succeeded on the same model; result has 41 joints incl. L/R_Thigh, L/R_Calf, L/R_Foot, L/R_ToeBase with legs properly separated (thighs Δz=0.167, calves Δz=0.202, feet Δz=0.128) and feet at y≈0.0045",
+    "joints": 41,
+    "skinned_meshes": 1,
+    "meshes": 1,
+    "required_leg_joints_present": true,
+    "all_joints": ["Root", "Pelvis", "Waist", "Spine01", "Spine02", "NeckTwist01", "NeckTwist02", "Head", "Hip", "L_Clavicle", "L_Upperarm", "L_UpperarmTwist01", "L_UpperarmTwist02", "L_Forearm", "L_ForearmTwist01", "L_ForearmTwist02", "L_Hand", "R_Clavicle", "R_Upperarm", "R_UpperarmTwist01", "R_UpperarmTwist02", "R_Forearm", "R_ForearmTwist01", "R_ForearmTwist02", "R_Hand", "L_Thigh", "L_ThighTwist01", "L_ThighTwist02", "L_Calf", "L_CalfTwist01", "L_CalfTwist02", "L_Foot", "L_ToeBase", "R_Thigh", "R_ThighTwist01", "R_ThighTwist02", "R_Calf", "R_CalfTwist01", "R_CalfTwist02", "R_Foot", "R_ToeBase"]
+  },
+
+  "measurements": {
+    "height_units": 1.0,
+    "min_y": 0.0,
+    "max_y": 1.0,
+    "bbox_min": [-0.1442, 0.0, -0.2155],
+    "bbox_max": [0.1442, 1.0, 0.2155],
+    "facing": "+X",
+    "facing_evidence": "ankle→toe rest vectors: L_Foot→L_ToeBase = [0.028, 0.0007, -0.0091], R_Foot→R_ToeBase = [0.0343, 0.0007, 0.0054] — both dominantly +X",
+    "feet_rest_y": 0.0045
+  },
+
+  "visual_verdict": {
+    "match": "close",
+    "matches": ["older woman", "toon style", "bright teal dress with pink hibiscus + white/yellow daisies + green leaves", "gold hoop earrings", "tan slide sandals", "curly salt-and-pepper hair", "warm brown skin", "full body, correct proportions, no extra/missing limbs"],
+    "deviations": [
+      "left hand generated as a stump (geometry stops ~0.085 past the wrist, no fingers) — image-to-model defect, confirmed in both renders and by vertex profiling; right hand has fingers but both read blocky/simplified",
+      "skin tone reads medium-warm brown rather than the deep brown of the reference (acceptable under render lighting)",
+      "hair reads more uniformly grey in the rig render than the dark-with-grey-streaks reference (the generation preview showed clearer dark/grey streaks — lighting dependent)"
+    ]
+  }
+}
